@@ -15,7 +15,7 @@ public class MedicalRecordController {
         this.medicalRecordService = medicalRecordService;
     }
 
-    @GetMapping("/medicalRecord")
+    @GetMapping("/medicalRecords")
     public Iterable<MedicalRecord> list() {
         return medicalRecordService.list();
     }
