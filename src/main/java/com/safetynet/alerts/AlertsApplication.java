@@ -19,8 +19,6 @@ import java.io.InputStream;
 
 @SpringBootApplication
 @Configuration
-@EntityScan("com.safetynet.alerts.model")
-@EnableJpaRepositories(basePackages = "com.safetynet.alerts.repository")
 public class AlertsApplication {
 
     public static void main(String[] args) {

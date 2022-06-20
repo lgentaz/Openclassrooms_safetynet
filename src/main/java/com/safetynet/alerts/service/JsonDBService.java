@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Configuration
-@ComponentScan("com.safetynet.alerts.repository")
 public class JsonDBService {
 
     @Autowired private final JsonDBRepository jsonDBRepository;
@@ -25,6 +24,6 @@ public class JsonDBService {
     }
 
     public JsonDB save(JsonDB jsonDB) {
-        return (JsonDB) jsonDBRepository.save(jsonDB);
+        return jsonDBRepository.save(jsonDB);
     }
 }
