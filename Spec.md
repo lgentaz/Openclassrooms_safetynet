@@ -46,7 +46,7 @@ Cet endpoint permettra d’effectuer les actions suivantes via Post/Put/Delete H
 -[ ]  supprimer un dossier médical (utilisez une combinaison de prénom et de nom comme identificateur unique).
 
 ## URLS
--[ ] [firestation?stationNumber=<station_number>](http://localhost:8080/firestation?stationNumber=<station_number>)
+-[ ] [/firestation?stationNumber=<station_number>](http://localhost:8080/firestation?stationNumber=<station_number>)
 
 Cette url doit retourner une liste des personnes couvertes par la caserne de pompiers correspondante.
 Donc, si le numéro de station = 1, elle doit renvoyer les habitants couverts par la station numéro 1. 
@@ -59,7 +59,7 @@ Cette url doit retourner une liste d'enfants (tout individu âgé de 18 ans ou m
 La liste doit comprendre le prénom et le nom de famille de chaque enfant, son âge et une liste des autres membres du foyer. 
 S'il n'y a pas d'enfant, cette url peut renvoyer une chaîne vide.
 
--[ ] [/phoneAlert?firestation=<firestation_number>](http://localhost:8080/phoneAlert?firestation=<firestation_number>)
+-[x] [/phoneAlert?firestation=<firestation_number>](http://localhost:8080/phoneAlert?firestation=<firestation_number>)
 
 Cette url doit retourner une liste des numéros de téléphone des résidents desservis par la caserne de pompiers. 
 Nous l'utiliserons pour envoyer des messages texte d'urgence à des foyers spécifiques.

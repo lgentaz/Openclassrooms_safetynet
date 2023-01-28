@@ -6,13 +6,22 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name="firestationss")
+@Table(name="firestations")
 public class Firestation {
     @Id
     @GeneratedValue( strategy = GenerationType.AUTO )
     private Long id;
 
     private String address;
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getStation() {
+        return station;
+    }
+
     private String station;
     public Firestation() {
 

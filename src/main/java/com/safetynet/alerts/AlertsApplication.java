@@ -16,6 +16,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.logging.Logger;
 
 @SpringBootApplication
 @Configuration

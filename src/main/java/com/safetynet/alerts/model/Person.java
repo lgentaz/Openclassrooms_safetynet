@@ -1,13 +1,10 @@
 package com.safetynet.alerts.model;
 
-import lombok.Data;
-
 import javax.persistence.*;
+
 
 @Entity
 public class Person {
-    public Person() {
-    }
     @Id
     @GeneratedValue( strategy = GenerationType.AUTO )
     private Long id;
