@@ -5,7 +5,7 @@ Les alertes SafetyNet seront développées avec la Stack Technique suivante :
 -[x]  Maven ; 
 -[x]  code versionné sur un repo Git ;
 -[ ]  tests unitaires avec JUnit ;
--[ ]  couverture de code mesurée avec la librairie JaCoCo ;
+-[x]  couverture de code mesurée avec la librairie JaCoCo ;
 -[ ]  connexion avec Log4j ou tinylog.
 
 Les alertes SafetyNet devront répondre aux exigences suivantes :

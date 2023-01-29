@@ -31,7 +31,7 @@ public class PersonService {
         return personRepository.findById(id);
     }
 
-    public List<Person> findByFullName(String firstName, String lastName) {
+    public List<Person> findPersonByFullName(String firstName, String lastName) {
         List<Person> allFirstName = personRepository.findAll().stream().filter(person -> person.getFirstName().contentEquals(firstName)).collect(Collectors.toList());
         List<Person> allFullName = allFirstName.stream().filter(person -> person.getLastName().contentEquals(lastName)).collect(Collectors.toList());
         return allFullName;
