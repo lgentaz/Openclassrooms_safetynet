@@ -9,14 +9,16 @@ import java.util.List;
 @Entity
 public class JsonDB {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(cascade=CascadeType.ALL)
+    @OneToMany(mappedBy = "id", cascade = CascadeType.ALL)
     private List<Person> persons;
-    @OneToMany(cascade=CascadeType.ALL)
+
+    @OneToMany(mappedBy = "id", cascade=CascadeType.ALL)
     private List<Firestation> firestations;
-    @OneToMany(cascade=CascadeType.ALL)
+
+    @OneToMany(mappedBy = "id", cascade=CascadeType.ALL)
     private List<MedicalRecord> medicalrecords;
 
     public Long getId() {
