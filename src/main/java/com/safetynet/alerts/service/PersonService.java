@@ -40,4 +40,13 @@ public class PersonService {
     public Set<String> findEmailByCity(String city) {
         return personRepository.findAll().stream().filter(person -> person.getCity().contentEquals(city)).map(Person::getEmail).collect(Collectors.toSet());
     }
+
+    public void deletePerson(String firstName, String lastName) {
+        Person selectedPerson = this.findPersonByFullName(firstName,lastName).stream().findAny().get();
+        personRepository.delete(selectedPerson);
+    }
+
+    public void createPerson(){}
+
+    public void updatePerson(){}
 }
