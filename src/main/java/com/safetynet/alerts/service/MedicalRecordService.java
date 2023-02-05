@@ -31,4 +31,8 @@ public class MedicalRecordService {
         List<MedicalRecord> allFullName = allFirstName.stream().filter(medicalRecord -> medicalRecord.getLastName().contentEquals(lastName)).collect(Collectors.toList());
         return allFullName;
     }
+
+    public void deleteMedicalRecord(String firstName, String lastName) {
+        this.findMedicalRecordByFullName(firstName,lastName).forEach(medicalRecord -> medicalRecordRepository.delete(medicalRecord));
+    }
 }

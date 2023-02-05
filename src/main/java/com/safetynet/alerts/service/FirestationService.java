@@ -32,11 +32,11 @@ public class FirestationService {
 
     public Iterable<Person> findByStation(String stationNumber) {
         List<String> stationAddresses = firestationRepository.findAll().stream().filter(firestation -> firestation.getStation().contentEquals(stationNumber)).map(Firestation::getAddress).collect(Collectors.toList());
-        List<Person> localPeople = new ArrayList<>();
+        List<Person> localPersons = new ArrayList<>();
         for (String address :stationAddresses) {
-            localPeople.addAll(personRepository.findAll().stream().filter(person -> person.getAddress().equals(address)).collect(Collectors.toList()));
+            localPersons.addAll(personRepository.findAll().stream().filter(person -> person.getAddress().equals(address)).collect(Collectors.toList()));
         };
-        return localPeople;
+        return localPersons;
     }
 
     public Iterable<String> findPhoneNumbers(String firestation_number) {
@@ -44,5 +44,22 @@ public class FirestationService {
         Set<String> phoneList = new HashSet<>();
         alertedPeople.forEach(person -> phoneList.add(person.getPhone()));
         return phoneList;
+    }
+
+    public void deleteFirestationsByStation(String stationNumber) {
+        List<Firestation> selectedFirestations = this.findFirestationsbyStation(stationNumber);
+        selectedFirestations.forEach(firestation -> firestationRepository.delete(firestation));
+    }
+
+    public void deleteFirestationsByAddress(String address) {
+        List<Firestation> selectedFirestations = this.findFirestationsbyAddress(address);
+    }
+
+    public List<Firestation> findFirestationsbyStation(String stationNumber) {
+        return firestationRepository.findAll().stream().filter(firestation -> firestation.getStation().contentEquals(stationNumber)).collect(Collectors.toList());
+    }
+
+    public List<Firestation> findFirestationsbyAddress(String address) {
+        return firestationRepository.findAll().stream().filter(firestation -> firestation.getAddress().contentEquals(address)).collect(Collectors.toList());
     }
 }

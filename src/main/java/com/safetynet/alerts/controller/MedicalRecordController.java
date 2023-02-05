@@ -2,10 +2,11 @@ package com.safetynet.alerts.controller;
 
 import com.safetynet.alerts.model.MedicalRecord;
 import com.safetynet.alerts.service.MedicalRecordService;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -20,6 +21,15 @@ public class MedicalRecordController {
     @GetMapping("/medicalRecords")
     public Iterable<MedicalRecord> list() {
         return medicalRecordService.list();
+    }
+
+    @DeleteMapping("/medicalRecord/delete")
+    public Map<String, Boolean> deletePerson(@RequestParam(value = "firstName") String firstName, @RequestParam(value = "lastName")String lastName)throws ResourceNotFoundException {
+        medicalRecordService.findMedicalRecordByFullName(firstName, lastName).stream().findFirst().orElseThrow(() -> new ResourceNotFoundException("MedicalRecord not found for this name : " + firstName + " " + lastName));
+        medicalRecordService.deleteMedicalRecord(firstName, lastName);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("deleted", Boolean.TRUE);
+        return response;
     }
 
 }
