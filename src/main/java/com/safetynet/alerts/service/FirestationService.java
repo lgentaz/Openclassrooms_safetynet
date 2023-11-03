@@ -1,8 +1,10 @@
 package com.safetynet.alerts.service;
 
 import com.safetynet.alerts.model.Firestation;
+import com.safetynet.alerts.model.MedicalRecord;
 import com.safetynet.alerts.model.Person;
 import com.safetynet.alerts.repository.FirestationRepository;
+import com.safetynet.alerts.repository.MedicalRecordRepository;
 import com.safetynet.alerts.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
@@ -18,48 +20,39 @@ import java.util.stream.Collectors;
 public class FirestationService {
     @Autowired
     private final FirestationRepository firestationRepository;
-    @Autowired
-    private final PersonRepository personRepository;
 
-    public FirestationService(FirestationRepository firestationRepository,PersonRepository personRepository) {
+    public FirestationService(FirestationRepository firestationRepository) {
         this.firestationRepository = firestationRepository;
-        this.personRepository = personRepository;
     }
 
-    public Iterable<Firestation> list() {
+    public List<Firestation> list() {
         return firestationRepository.findAll();
     }
 
-    public Iterable<Person> findByStation(String stationNumber) {
-        List<String> stationAddresses = firestationRepository.findAll().stream().filter(firestation -> firestation.getStation().contentEquals(stationNumber)).map(Firestation::getAddress).collect(Collectors.toList());
-        List<Person> localPersons = new ArrayList<>();
-        for (String address :stationAddresses) {
-            localPersons.addAll(personRepository.findAll().stream().filter(person -> person.getAddress().equals(address)).collect(Collectors.toList()));
-        };
-        return localPersons;
+    public List<Firestation> findFirestationsbyStation(String stationNumber) {
+        return this.list().stream().filter(firestation -> firestation.getStation().contentEquals(stationNumber)).collect(Collectors.toList());
     }
 
-    public Iterable<String> findPhoneNumbers(String firestation_number) {
-        Iterable<Person> alertedPeople = this.findByStation(firestation_number);
-        Set<String> phoneList = new HashSet<>();
-        alertedPeople.forEach(person -> phoneList.add(person.getPhone()));
-        return phoneList;
+    public List<Firestation> findFirestationsbyAddress(String address) {
+        return this.list().stream().filter(firestation -> firestation.getAddress().contentEquals(address)).collect(Collectors.toList());
+    }
+
+    public List<String> getFirestationAddresses(String stationNumber){
+        return this.findFirestationsbyStation(stationNumber).stream().map(Firestation::getAddress).collect(Collectors.toList());
     }
 
     public void deleteFirestationsByStation(String stationNumber) {
-        List<Firestation> selectedFirestations = this.findFirestationsbyStation(stationNumber);
+        Iterable<Firestation> selectedFirestations = this.findFirestationsbyStation(stationNumber);
         selectedFirestations.forEach(firestation -> firestationRepository.delete(firestation));
     }
 
     public void deleteFirestationsByAddress(String address) {
-        List<Firestation> selectedFirestations = this.findFirestationsbyAddress(address);
+        Iterable<Firestation> selectedFirestations = this.findFirestationsbyAddress(address);
+        selectedFirestations.forEach(firestation -> firestationRepository.delete(firestation));
     }
 
-    public List<Firestation> findFirestationsbyStation(String stationNumber) {
-        return firestationRepository.findAll().stream().filter(firestation -> firestation.getStation().contentEquals(stationNumber)).collect(Collectors.toList());
-    }
-
-    public List<Firestation> findFirestationsbyAddress(String address) {
-        return firestationRepository.findAll().stream().filter(firestation -> firestation.getAddress().contentEquals(address)).collect(Collectors.toList());
+    public void createFirestation(String address, String station) {
+        Firestation firestation = new Firestation(address, station);
+        firestationRepository.save(firestation);
     }
 }

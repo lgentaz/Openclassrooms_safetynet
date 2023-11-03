@@ -3,6 +3,7 @@ package com.safetynet.alerts.controller;
 import com.safetynet.alerts.model.Firestation;
 import com.safetynet.alerts.model.Person;
 import com.safetynet.alerts.service.FirestationService;
+import org.pmw.tinylog.Logger;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,32 +24,49 @@ public class FirestationController {
         return firestationService.list();
     }
 
-    @GetMapping("/firestation")
-    public Iterable<Person> findByStation(@RequestParam(value = "stationNumber") String stationNumber)  {
-        return firestationService.findByStation(stationNumber);
+    @PostMapping("/firestation")
+    public void createPerson(String address, String station){
+        firestationService.createFirestation(address, station);
     }
 
-    @DeleteMapping("/firestation/delete")
-    public Map<String, Boolean> deleteFirestationsByStation(@RequestParam(value = "firestation") String stationNumber) throws ResourceNotFoundException {
-//        firestationService.findStation(stationNumber).getStation().orElseThrow(() -> new ResourceNotFoundException("Firestation not found for this number : " + stationNumber));
-        firestationService.deleteFirestationsByStation(stationNumber);
+    @PutMapping("/firestation")
+    public void updatePerson(String address, String station){
+    //    firestationService.createFirestation(address, station);
+    }
+
+    @DeleteMapping("/firestation/{stationNumber}")
+    public Map<String, Boolean> deleteFirestationsByStation(@PathVariable("stationNumber") String stationNumber) throws ResourceNotFoundException {
         Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
+        response.put("deleted", Boolean.FALSE);
+        try {
+            Logger.info(firestationService.findFirestationsbyStation(stationNumber));
+            firestationService.deleteFirestationsByStation(stationNumber);
+            Logger.info("Firestation n°" + stationNumber + " deleted.");
+            response.put("deleted", Boolean.TRUE);
+        }
+        catch(ResourceNotFoundException e) {
+            Logger.info("No firestation found for this station number : " + stationNumber);
+        }
+        Logger.info("Response: " + response.toString());
         return response;
     }
 
-    @DeleteMapping("/firestation/delete")
-    public Map<String, Boolean> deleteFirestationsByAddress(@RequestParam(value = "address") String address) throws ResourceNotFoundException {
-//        firestationService.findStation(stationNumber).getStation().orElseThrow(() -> new ResourceNotFoundException("Firestation not found for this address : " + address));
-        firestationService.deleteFirestationsByAddress(address);
+    @DeleteMapping("/firestation/d/{address}")
+    public Map<String, Boolean> deleteFirestationsByAddress(@PathVariable("address") String address) throws ResourceNotFoundException {
         Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
+        response.put("deleted", Boolean.FALSE);
+        try {
+            //firestationService.findFirestationsbyStation(stationNumber).iterator().hasNext();
+            firestationService.deleteFirestationsByAddress(address);
+            Logger.info("Firestation at " + address + " was deleted.");
+            response.put("deleted", Boolean.TRUE);
+    }
+        catch(ResourceNotFoundException e) {
+        Logger.info("No firestation found for this address : " + address);
+    }
+        Logger.info("Response: " + response.toString());
         return response;
     }
 
-    @GetMapping("/phoneAlert")
-    public Iterable<String> findPhoneNumbers(@RequestParam(value = "firestation") String stationNumber)  {
-        return firestationService.findPhoneNumbers(stationNumber);
-    }
 
 }

@@ -8,6 +8,11 @@ import javax.persistence.*;
 @Entity
 @Table(name="firestations")
 public class Firestation {
+    public Firestation(String address, String station) {
+        this.address = address;
+        this.station = station;
+    }
+
     @Id
     @GeneratedValue( strategy = GenerationType.AUTO )
     private Long id;

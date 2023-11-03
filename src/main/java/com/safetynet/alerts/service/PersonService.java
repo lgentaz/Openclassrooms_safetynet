@@ -1,7 +1,9 @@
 package com.safetynet.alerts.service;
 
 import com.safetynet.alerts.model.Person;
+import com.safetynet.alerts.model.MedicalRecord;
 import com.safetynet.alerts.repository.PersonRepository;
+import com.safetynet.alerts.repository.MedicalRecordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -23,7 +25,7 @@ public class PersonService {
         this.personRepository = personRepository;
     }
 
-    public Iterable<Person> list() {
+    public List<Person> list() {
         return personRepository.findAll();
     }
 
@@ -32,9 +34,13 @@ public class PersonService {
     }
 
     public List<Person> findPersonByFullName(String firstName, String lastName) {
-        List<Person> allFirstName = personRepository.findAll().stream().filter(person -> person.getFirstName().contentEquals(firstName)).collect(Collectors.toList());
-        List<Person> allFullName = allFirstName.stream().filter(person -> person.getLastName().contentEquals(lastName)).collect(Collectors.toList());
+        List<Person> allFullName = this.list().stream().filter(person -> person.getLastName().contentEquals(lastName) && person.getFirstName().contentEquals(firstName)).collect(Collectors.toList());
         return allFullName;
+    }
+
+    public List<Person> findPersonByAddress(String address) {
+        List<Person> allAddress = this.list().stream().filter(person -> person.getAddress().equals(address)).collect(Collectors.toList());
+        return allAddress;
     }
 
     public Set<String> findEmailByCity(String city) {
@@ -42,11 +48,20 @@ public class PersonService {
     }
 
     public void deletePerson(String firstName, String lastName) {
-        Person selectedPerson = this.findPersonByFullName(firstName,lastName).stream().findAny().get();
-        personRepository.delete(selectedPerson);
+        this.findPersonByFullName(firstName,lastName).forEach(person -> personRepository.delete(person));
     }
 
-    public void createPerson(){}
+    public void createPerson(String firstName, String lastName, String phone, String email, String address, String city, String zip){
+        Person person = new Person();
+        person.setFirstName(firstName);
+        person.setLastName(lastName);
+        person.setPhone(phone);
+        person.setEmail(email);
+        person.setAddress(address);
+        person.setCity(city);
+        person.setZip(zip);
+        personRepository.save(person);
+    }
 
     public void updatePerson(){}
 }

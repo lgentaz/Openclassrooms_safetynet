@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.safetynet.alerts.model.JsonDB;
 import com.safetynet.alerts.service.JsonDBService;
+import org.pmw.tinylog.Logger;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -16,7 +17,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.logging.Logger;
 
 @SpringBootApplication
 @Configuration
@@ -35,9 +35,9 @@ public class AlertsApplication {
             try {
                 JsonDB jsonDB = mapper.readValue(inputStream,typeReference);
                 jsonDBService.save(jsonDB);
-                System.out.println("jsonDB Saved!");
+                Logger.info("jsonDB Saved!");
             } catch (IOException e){
-                System.out.println("Unable to save jsonDB: " + e.getMessage());
+                Logger.error("Unable to save jsonDB: " + e.getMessage());
             }
         };
     }
